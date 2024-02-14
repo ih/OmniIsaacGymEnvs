@@ -34,6 +34,7 @@ def import_tasks():
     from omniisaacgymenvs.tasks.anymal_terrain import AnymalTerrainTask
     from omniisaacgymenvs.tasks.ball_balance import BallBalanceTask
     from omniisaacgymenvs.tasks.cartpole import CartpoleTask
+    from omniisaacgymenvs.tasks.jetbot import JetbotTask
     from omniisaacgymenvs.tasks.cartpole_camera import CartpoleCameraTask
     from omniisaacgymenvs.tasks.crazyflie import CrazyflieTask
     from omniisaacgymenvs.tasks.factory.factory_task_nut_bolt_pick import FactoryTaskNutBoltPick
@@ -58,6 +59,7 @@ def import_tasks():
         "AnymalTerrain": AnymalTerrainTask,
         "BallBalance": BallBalanceTask,
         "Cartpole": CartpoleTask,
+        "Jetbot": JetbotTask,
         "CartpoleCamera": CartpoleCameraTask,
         "FactoryTaskNutBoltPick": FactoryTaskNutBoltPick,
         "FactoryTaskNutBoltPlace": FactoryTaskNutBoltPlace,

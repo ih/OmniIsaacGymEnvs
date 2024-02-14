@@ -1,9 +1,7 @@
-# used to create the object
-name: Cartpole
+name: Jetbot
 
 physics_engine: ${..physics_engine}
 
-# if given, will override the device setting in gym. 
 env:
   numEnvs: ${resolve_default:5,${...num_envs}}
   envSpacing: 4.0
@@ -59,7 +57,7 @@ sim:
     gpu_temp_buffer_capacity: 16777216
     gpu_max_num_partitions: 8
 
-  Cartpole:
+  Jetbot:
     # -1 to use default values
     override_usd_defaults: False
     enable_self_collisions: False
