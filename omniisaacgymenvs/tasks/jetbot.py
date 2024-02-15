@@ -16,7 +16,8 @@ class JetbotTask(RLTask):
         self.update_config(sim_config)
         self._max_episode_length = 256
 
-        self._num_observations = 5
+        # jetbot position 3, jetbot orientation 4, linear velocity 3, angular velocity 3, goal position 3 
+        self._num_observations = 16 
         self._num_actions = 2
 
         RLTask.__init__(self, name, env)
@@ -114,16 +115,19 @@ class JetbotTask(RLTask):
         scene.add(self._goals)
 
     def get_observations(self) -> dict:
-        print("Getting an observation")
-        pdb.set_trace()
         jetbot_world_position, jetbot_world_orientation = self._jetbots.get_world_poses(clone = False)
         jetbot_linear_velocity = self._jetbots.get_linear_velocities()
         jetbot_angular_velocity = self._jetbots.get_angular_velocities()
         goal_world_position, _ = self._goals.get_world_poses()
 
-        # self.obs_buf[:, 0] = 
+        self.obs_buf[:, :3] = jetbot_world_position
+        self.obs_buf[:, 3:7] = jetbot_world_orientation
+        self.obs_buf[:, 7:10] = jetbot_linear_velocity
+        self.obs_buf[:, 10:13] = jetbot_angular_velocity
+        self.obs_buf[:, 13:16] = goal_world_position 
 
-        # observations = {self._jetbots.name: {"obs_buf"}}
+        observations = {self._jetbots.name: {"obs_buf": self.obs_buf}}
+        return observations
 
     def post_reset(self):
         None
