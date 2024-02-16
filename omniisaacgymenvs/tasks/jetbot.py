@@ -129,5 +129,29 @@ class JetbotTask(RLTask):
         observations = {self._jetbots.name: {"obs_buf": self.obs_buf}}
         return observations
 
+
+    def pre_physics_step(self, action) -> None:
+        if not self.world.is_playing():
+            return
+        self.jetbot_prev_pos = self.obs_buf[:, :3]
+
+
+    def calculate_metrics(self) -> None:
+        goal_position, _ = self._goals.get_world_poses()
+        jetbot_cur_pos, _ = self._jetbots.get_world_poses(clone = False)
+        previous_dist_to_goal = torch.linalg.norm(goal_position - self.jetbot_prev_pos, dim=1)
+        current_dist_to_goal = torch.linalg.norm(goal_position - jetbot_cur_pos, dim=1)
+        reward = previous_dist_to_goal - current_dist_to_goal
+
+        self.rew_buf[:] = reward
+
+    def is_done(self) -> None:
+        resets = torch.where(self.progress_buf >= self._max_episode_length, 1, 0)
+        goal_position, _ = self._goals.get_world_poses()
+        jetbot_cur_pos, _ = self._jetbots.get_world_poses(clone = False)
+        current_dist_to_goal = torch.linalg.norm(goal_position - jetbot_cur_pos, dim=1)
+        resets = torch.where(current_dist_to_goal < .1, 1, resets)
+        self.reset_buf[:] = resets
+
     def post_reset(self):
         None
